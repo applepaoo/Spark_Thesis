@@ -86,7 +86,7 @@ object HoltWintersDate {
     println("現在日期:" + getNowDate() + " 星期" + day)
     println("上週日期:" + sdf.format(cal.getTime))
 
-
+    //每天相對應到符合的條件
     day match {
       case 1 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
