@@ -3,8 +3,11 @@ package Data_Lake
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
+import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
+
+
 
 object HoltWinters{
   def main(args: Array[String]): Unit = {
@@ -83,7 +86,7 @@ object HoltWinters{
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
         var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")" //上週一與二日期當條件
-      var test = spark.sql(sqlQuery)
+        var test = spark.sql(sqlQuery)
         test.show(48)
         println(sqlQuery)
 
@@ -93,6 +96,9 @@ object HoltWinters{
         var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         var test = spark.sql(sqlQuery)
         test.show(48)
+        test.show(48)
+        val dataTrain = test.select("x").rdd.map(r => r(0)).map(_.toString).map(_.toDouble).collect()
+        val ts = Vectors.dense(dataTrain.map(_.toDouble).toArray)
         println(sqlQuery)
 
       case 4 =>
