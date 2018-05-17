@@ -54,7 +54,7 @@ object HoltWintersDate {
       test.show(48)
       val dataTrain = test.select("x").rdd.map(r => r(0)).map(_.toString).map(_.toDouble).collect()
       val ts = Vectors.dense(dataTrain)
-      val hModel = HoltWinters.fitModel(ts, 24, "additive", "BOBYQA")
+      val hModel = HoltWinters.fitModel(ts, 24, "additive", "BOBYQA")//multiplicative, additive
       val forecast = hModel.forecast(ts, ts)
       val forecastArray = forecast.toArray
       println("開始預測")
