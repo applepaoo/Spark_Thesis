@@ -127,42 +127,42 @@ object HoltWintersDate {
       case 1 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_6.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
         trainAndPredict(sqlQuery)
 
       case 2 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
 
       case 3 =>
         var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         trainAndPredict(sqlQuery)
 
       case 4 =>
         var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         trainAndPredict(sqlQuery)
 
       case 5 =>
         var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         trainAndPredict(sqlQuery)
 
       case 6 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_6.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
         trainAndPredict(sqlQuery)
 
       case 7 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
+        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         trainAndPredict(sqlQuery)
     }
 
