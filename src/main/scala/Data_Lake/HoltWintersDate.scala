@@ -54,7 +54,8 @@ object HoltWintersDate {
       test.show(48)
       val dataTrain = test.select("x").rdd.map(r => r(0)).map(_.toString).map(_.toDouble).collect()
       val ts = Vectors.dense(dataTrain)
-      val hModel = HoltWinters.fitModel(ts, 24, "additive", "BOBYQA")//multiplicative, additive
+      val hModel = HoltWinters.fitModel(ts, 24, "Additive", "BOBYQA")
+      //Multiplicative, Additive
       val forecast = hModel.forecast(ts, ts)
       val forecastArray = forecast.toArray
       println("開始預測")
@@ -75,16 +76,20 @@ object HoltWintersDate {
 
       //寫入至MySQL
       println("寫入開始...")
-      val predictRDD = spark.sparkContext.parallelize(writeToMySQLArray)//創建RDD
-      val schema = StructType(List(StructField("date", StringType, true), StructField("hr", IntegerType, true), StructField("Meter_id", StringType, true), StructField("P", DoubleType, true)))//定義schema
-      val rowRDD = predictRDD.map(p => Row(p(0).toString, p(1).toInt, p(2).toString, p(3).toDouble))//RDD指定元素型態
-      val predictDF = spark.createDataFrame(rowRDD, schema)//
+      val predictRDD = spark.sparkContext.parallelize(writeToMySQLArray)
+      //創建RDD
+      val schema = StructType(List(StructField("date", StringType, true), StructField("hr", IntegerType, true), StructField("Meter_id", StringType, true), StructField("P", DoubleType, true)))
+      //定義schema
+      val rowRDD = predictRDD.map(p => Row(p(0).toString, p(1).toInt, p(2).toString, p(3).toDouble))
+      //RDD指定元素型態
+      val predictDF = spark.createDataFrame(rowRDD, schema)
+      //
       //設置寫入MySQL相關變量
       val prop = new Properties()
       prop.put("user", "hpc")
       prop.put("password", "hpcverygood")
       prop.put("driver", "com.mysql.jdbc.Driver")
-      predictDF.write.mode("append").jdbc("jdbc:mysql://120.109.150.175:3306/power", "power.PowerHourPredict", prop)//寫入
+      predictDF.write.mode("append").jdbc("jdbc:mysql://120.109.150.175:3306/power", "power.PowerHourPredict", prop) //寫入
       println("已寫入至MySQL")
 
     }
@@ -151,13 +156,13 @@ object HoltWintersDate {
       case 6 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_6.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")" //上週一與二日期當條件
+        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
         trainAndPredict(sqlQuery)
 
       case 7 =>
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
-        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")" //上週一與二日期當條件
+        var sqlQuery = "select `p`/1000 as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
         trainAndPredict(sqlQuery)
     }
 
