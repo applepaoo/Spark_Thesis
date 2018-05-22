@@ -23,7 +23,7 @@ object HoltWintersDate {
 
 
     val jdbcDF = spark.read.format("jdbc").option("url", "jdbc:mysql://120.109.150.175:3306/power").option("driver", "com.mysql.jdbc.Driver").option("dbtable", "PowerHour").option("user", "hpc").option("password", "hpcverygood").load()
-    jdbcDF.createOrReplaceTempView("PowerHOur_test") //DataFrame來源為藉由JDBC取得MySQL表
+    jdbcDF.createOrReplaceTempView("PowerHour_test") //DataFrame來源為藉由JDBC取得MySQL表
 
 
     def getNowDate(): String = {
@@ -49,7 +49,7 @@ object HoltWintersDate {
     def trainAndPredict(a: String) = {
       //取得MySQL資料並利用HoltWinters預測未來兩天
       var test = spark.sql(a)
-      println("querty:" + a)
+      println("query:" + a)
       println("訓練集")
       test.show(48)
       val dataTrain = test.select("x").rdd.map(r => r(0)).map(_.toString).map(_.toDouble).collect()
@@ -134,7 +134,7 @@ object HoltWintersDate {
         var sqlDate = "'" + sdf.format(cal.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
         var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-
+        trainAndPredict(sqlQuery)
       case 3 =>
         var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
         var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
