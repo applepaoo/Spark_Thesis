@@ -90,7 +90,7 @@ object HoltWintersDate {
       prop.put("password", "hpcverygood")
       prop.put("driver", "com.mysql.jdbc.Driver")
       predictDF.write.mode("append").jdbc("jdbc:mysql://120.109.150.175:3306/power", "power.PowerHourPredict", prop) //寫入
-      println("已寫入至MySQL")
+      println("已寫入24筆資料至MySQL")
 
     }
 
