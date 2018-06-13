@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date, Properties}
 
 import com.cloudera.sparkts.models.HoltWinters
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.types._
-import org.apache.spark.{SparkConf, SparkContext}
 
+object HoltWintersLastTwo{
 
-object HoltWintersDate {
   def main(args: Array[String]): Unit = {
 
 
@@ -99,72 +99,29 @@ object HoltWintersDate {
     //規定好日期格式
     val cal = java.util.Calendar.getInstance();
     val cal_1 = java.util.Calendar.getInstance();
-    val cal_2 = java.util.Calendar.getInstance();
-    val cal_6 = java.util.Calendar.getInstance();
-    val cal_8 = java.util.Calendar.getInstance();
     //val date = "2018-05-13"
     cal.setTime(sdf.parse(getNowDate())) //解析日期
     cal.add(java.util.Calendar.DATE, -7) //往前一星期
 
     cal_1.setTime(sdf.parse(getNowDate())) //解析日期
-    cal_1.add(java.util.Calendar.DATE, -1) //往前1天
+    cal_1.add(java.util.Calendar.DATE, -14) //往前兩星期
 
-    cal_2.setTime(sdf.parse(getNowDate())) //解析日期
-    cal_2.add(java.util.Calendar.DATE, -2) //往前2天
 
-    cal_6.setTime(sdf.parse(getNowDate())) //解析日期
-    cal_6.add(java.util.Calendar.DATE, -6) //往前6天
-
-    cal_8.setTime(sdf.parse(getNowDate())) //解析日期
-    cal_8.add(java.util.Calendar.DATE, -8) //往前6天
 
     val day = determineDayOfTheWeek(cal.get(Calendar.DAY_OF_WEEK)) //找出星期幾
     println("現在日期:" + getNowDate() + " 星期" + day)
     println("上週日期:" + sdf.format(cal.getTime))
+    println("上兩週日期:" + sdf.format(cal_1.getTime))
+
+    //SELECT * FROM `PowerHour` WHERE `Meter_id` = "LIB-4" and (`date` = "2018-06-06" or `date` = "2018-05-30")
+    val sqlDate = "'" + sdf.format(cal.getTime) + "'"
+    val sqlDate_1 = "'" + sdf.format(cal_1.getTime) + "'"
+    val sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and " + "(`date` =" + sqlDate + " or `date` = " + sqlDate_1  + ")"
+
+    trainAndPredict(sqlQuery)
 
     //每天相對應到符合的條件
-    day match {
-      case 1 =>
-        var sqlDate = "'" + sdf.format(cal.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_6.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
-        trainAndPredict(sqlQuery)
-
-      case 2 =>
-        var sqlDate = "'" + sdf.format(cal.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-        trainAndPredict(sqlQuery)
-      case 3 =>
-        var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-        trainAndPredict(sqlQuery)
-
-      case 4 =>
-        var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-        trainAndPredict(sqlQuery)
-
-      case 5 =>
-        var sqlDate = "'" + sdf.format(cal_1.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_2.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-        trainAndPredict(sqlQuery)
-
-      case 6 =>
-        var sqlDate = "'" + sdf.format(cal.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_6.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate + ", " + sqlDate_1 + ")"
-        trainAndPredict(sqlQuery)
-
-      case 7 =>
-        var sqlDate = "'" + sdf.format(cal.getTime) + "'"
-        var sqlDate_1 = "'" + sdf.format(cal_8.getTime) + "'"
-        var sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and `date` in " + "(" + sqlDate_1 + ", " + sqlDate + ")"
-        trainAndPredict(sqlQuery)
-    }
 
   }
+
 }
