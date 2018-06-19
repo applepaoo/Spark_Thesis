@@ -89,7 +89,7 @@ object HoltWintersLastTwo{
       prop.put("user", "hpc")
       prop.put("password", "hpcverygood")
       prop.put("driver", "com.mysql.jdbc.Driver")
-      predictDF.write.mode("append").jdbc("jdbc:mysql://120.109.150.175:3306/power", "power.PowerHourPredict", prop) //寫入
+      predictDF.write.mode("append").jdbc("jdbc:mysql://120.109.150.175:3306/power", "power.PowerHourPredict2", prop) //寫入
       println("已寫入24筆資料至MySQL")
 
     }
@@ -117,7 +117,7 @@ object HoltWintersLastTwo{
     val sqlDate = "'" + sdf.format(cal.getTime) + "'"
     val sqlDate_1 = "'" + sdf.format(cal_1.getTime) + "'"
     val sqlQuery = "select round(`p`/1000, 1) as x from PowerHour_test where `Meter_id` = 'LIB-4' and `p`/1000 > 10 and " + "(`date` =" + sqlDate + " or `date` = " + sqlDate_1  + ")"
-
+    println(sqlQuery)
     trainAndPredict(sqlQuery)
 
     //每天相對應到符合的條件
